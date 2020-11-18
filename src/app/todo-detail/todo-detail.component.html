@@ -1,0 +1,9 @@
+<div *ngIf="todo; else elseBlock">
+  <p >{{ todo.title | uppercase }}</p>
+  <p>ID: {{ todo.id }}</p>
+  <p>USER ID: {{todo.userId}}</p>
+  <p>Completed: {{ todo.completed }}</p>
+</div>
+<ng-template #elseBlock>
+  <p>No data for todo</p>
+</ng-template>

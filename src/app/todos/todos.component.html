@@ -1,0 +1,12 @@
+<div class="content">
+  <ul>
+    <li *ngFor="let todo of todos">
+      <a routerLink="/detail/{{todo.id}}">
+        <h3>{{ todo.title | uppercase }}</h3>
+      </a>
+      <span>Todo completed: {{ todo.completed }}</span>
+    </li>
+  </ul>
+</div>
+
+
