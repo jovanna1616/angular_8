@@ -3,6 +3,8 @@ import { Todo } from '../models/todo';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { TodosStore } from '../shared/store/todos.store';
+import { TodosQuery } from '../shared/store/todos.query';
 
 
 @Injectable({
@@ -16,13 +18,22 @@ export class TodoService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json;charset=UTF-8' })
   };
   
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private todosStore: TodosStore,
+    private todosQuery: TodosQuery
+  ) { }
 
-  getTodos(): Observable<Todo[]> {
+  getTodos () {
+    this.todosStore.setLoading(true)
     return this.http.get<Todo[]>(this.todosBaseUrl)
       .pipe(
+        tap(todos => {
+          this.todosStore.set(todos);
+          this.todosStore.setLoading(false)
+        }),
         catchError(this.handleError<Todo[]>('getTodos', []))
-      );
+      ).subscribe();
   }
 
   getTodo (id: number): Observable<Todo> {
@@ -33,7 +44,7 @@ export class TodoService {
   }
 
   updateTodo (todo: Todo): Observable<Todo> {
-    console.log('UPDATE TODO', todo)
+    this.todosStore.update({ name: 'tester' });
     return this.http.put<Todo>(`${this.todosBaseUrl}/${todo.id}`, todo, this.httpOptions)
       .pipe(
         catchError(this.handleError<Todo>(`Unable to get todo by id: ${todo.id}`))

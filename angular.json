@@ -123,6 +123,7 @@
   },
   "defaultProject": "my-app",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "defaultCollection": "@datorama/akita"
   }
 }

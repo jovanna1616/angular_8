@@ -9,6 +9,10 @@ import { AppComponent } from './app.component';
 import { TodosComponent } from './todos/todos.component';
 import { TodoDetailComponent } from './todo-detail/todo-detail.component';
 import { EditTodoComponent } from './edit-todo/edit-todo.component';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { environment } from '../environments/environment';
+import { TodosStore } from './shared/store/todos.store';
+import { TodosQuery } from './shared/store/todos.query';
 
 @NgModule({
   declarations: [
@@ -21,9 +25,10 @@ import { EditTodoComponent } from './edit-todo/edit-todo.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    environment.production ? [] : AkitaNgDevtools.forRoot()
   ],
-  providers: [],
+  providers: [TodosStore, TodosQuery],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
