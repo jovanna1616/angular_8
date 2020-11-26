@@ -10,6 +10,11 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class TodoService {
   private todosBaseUrl = 'https://jsonplaceholder.typicode.com/todos';
+  // private todosBaseUrl = 'http://127.0.0.1:8000/api/todos';
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json;charset=UTF-8' })
+  };
   
   constructor(private http: HttpClient) { }
 
@@ -23,7 +28,15 @@ export class TodoService {
   getTodo (id: number): Observable<Todo> {
     return this.http.get<Todo>(`${this.todosBaseUrl}/${id}`)
       .pipe(
-        catchError(this.handleError<Todo>(`Get todo by id: ${id}`))
+        catchError(this.handleError<Todo>(`Unable to get todo by id: ${id}`))
+      );
+  }
+
+  updateTodo (todo: Todo): Observable<Todo> {
+    console.log('UPDATE TODO', todo)
+    return this.http.put<Todo>(`${this.todosBaseUrl}/${todo.id}`, todo, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<Todo>(`Unable to get todo by id: ${todo.id}`))
       );
   }
 

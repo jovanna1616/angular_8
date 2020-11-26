@@ -1,0 +1,15 @@
+<div *ngIf="todo">
+  <h2>Editing: {{todo.title | uppercase}}</h2>
+  <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+    <label>
+      Title:
+      <input type="text" formControlName="title" />
+    </label>
+    <label>
+      Completed:
+      <input type="checkbox" formControlName="completed" />
+    </label>
+    <button [disabled]="!todoForm.valid" type="submit">SAVE</button>
+  </form>
+
+</div>

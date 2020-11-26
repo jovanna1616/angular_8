@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { TodoService } from '../services/todo.service';
 import { Todo } from '../models/todo';
 
@@ -16,7 +15,6 @@ export class TodoDetailComponent implements OnInit {
   constructor(
     private todoService: TodoService,
     private route: ActivatedRoute,
-    private location: Location
   ) { }
 
   getTodo () {

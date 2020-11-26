@@ -3,6 +3,7 @@
   <p>ID: {{ todo.id }}</p>
   <p>USER ID: {{todo.userId}}</p>
   <p>Completed: {{ todo.completed }}</p>
+  <a routerLink="/edit/{{todo.id}}">EDIT TODO</a>
 </div>
 <ng-template #elseBlock>
   <p>No data for todo</p>
