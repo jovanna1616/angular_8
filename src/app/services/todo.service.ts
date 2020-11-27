@@ -39,14 +39,24 @@ export class TodoService {
   getTodo (id: number): Observable<Todo> {
     return this.http.get<Todo>(`${this.todosBaseUrl}/${id}`)
       .pipe(
+        tap(
+          todo => {
+            this.todosStore.add(todo);
+            this.todosStore.setLoading(false)
+          }
+        ),
         catchError(this.handleError<Todo>(`Unable to get todo by id: ${id}`))
       );
   }
 
   updateTodo (todo: Todo): Observable<Todo> {
-    this.todosStore.update({ name: 'tester' });
-    return this.http.put<Todo>(`${this.todosBaseUrl}/${todo.id}`, todo, this.httpOptions)
+    return this.http.patch<Todo>(`${this.todosBaseUrl}/${todo.id}`, todo, this.httpOptions)
       .pipe(
+        tap(
+          todo => {
+            this.todosStore.update(todo.id.toString(), { ...todo });
+          }
+        ),
         catchError(this.handleError<Todo>(`Unable to get todo by id: ${todo.id}`))
       );
   }

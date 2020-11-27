@@ -6,3 +6,12 @@
     flex-direction: column;
     align-items: center;
   }
+
+.completed {
+  font-weight: bold;
+  color: blue;
+}
+
+.warning {
+  color: red;
+}

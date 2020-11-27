@@ -12,7 +12,7 @@ import { TodosQuery } from '../shared/store/todos.query';
 export class TodosComponent implements OnInit {
   todos: Todo[];
   limitTo = 10;
-  isLoading$ = this.todosQuery.selectLoading();
+  isLoading$ = false;
   name$ = this.todosQuery.name;
   loadButtonText = 'Load todos'
   @Output()
@@ -40,7 +40,11 @@ export class TodosComponent implements OnInit {
   }
 
   getTodos () {
-    this.todoService.getTodos();
+    // since no real DB update check if there is no todos
+    // or if there is less than 200 todos(case when comming from edit page)
+    if (!this.todosQuery.getCount() || this.todosQuery.getCount() < 200) {
+      this.todoService.getTodos();
+    }
     this.todosQuery.selectAll({ limitTo: this.limitTo }).subscribe(todos => {
       this.todos = todos
       this.todosCount = this.todosQuery.getCount()
@@ -49,5 +53,6 @@ export class TodosComponent implements OnInit {
 
   ngOnInit () {
     this.getTodos()
+    this.todosQuery.selectLoading().subscribe(isLoading => (this.isLoading$ = isLoading))
   }
 }

@@ -1,11 +1,14 @@
 <div class="content">
-  <p>Test for name: {{name$}}</p>
-  <ul>
+  <ul *ngIf="!isLoading$ && todos.length">
     <li *ngFor="let todo of todos">
       <a routerLink="/detail/{{todo.id}}">
         <h3>{{ todo.title | uppercase }} ({{todo.id}})</h3>
       </a>
-      <span>Todo completed: {{ todo.completed }}</span>
+      <p>Todo completed: 
+        <span class="completed" [ngClass]="{'warning' : !todo.completed}">
+          {{ todo.completed }}
+        </span>
+      </p>
     </li>
   </ul>
   <button (click)="loadTodos()">{{loadButtonText}}...</button>

@@ -4,6 +4,8 @@ import { TodoService } from '../services/todo.service';
 import { Todo } from '../models/todo';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { TodosQuery } from '../../app/shared/store/todos.query';
+import isEmpty from 'lodash/isEmpty';
 
 @Component({
   selector: 'app-edit-todo',
@@ -20,31 +22,37 @@ export class EditTodoComponent implements OnInit {
   constructor(
     private todoService: TodoService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private todosQuery: TodosQuery
   ) { }
 
+  setControls () {
+    if (!isEmpty(this.todo)) {
+      this.todoForm.controls.title.setValue(this.todo.title)
+      this.todoForm.controls.completed.setValue(this.todo.completed)
+    }
+  }
+
   getTodo () {
-    const id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.todoService.getTodo(id).subscribe(todo => {
-      this.todo = todo
-    })
+    const id = this.route.snapshot.paramMap.get('id')
+    if (this.todosQuery.hasEntity(id)) {
+      this.todo = this.todosQuery.getEntity(id);
+      this.setControls();
+    } else {
+      this.todoService.getTodo(parseInt(id)).subscribe(todo => this.todo = todo)
+      this.todosQuery.selectEntity(id).subscribe(todo => {
+        this.todo = todo;
+        this.setControls();
+      })
+    }
   }
   onSubmit () {
-    console.log('SUBMITING data', this.todo)
-    const data = {
-      id: this.todo.id,
-      userId: this.todo.id,
-      title: 'testing',
-      completed: true,
-    }
-    this.todoService.updateTodo(data);
+    const data = { id: this.todo.id, ...this.todoForm.value }
+    this.todoService.updateTodo(data).subscribe();
     this.router.navigate(['/']);
   }
 
   ngOnInit (): void {
     this.getTodo();
-    console.log('TEST', this.todo)
-    // this.todoForm.controls.title.setValue('ASFDSF')
   }
-
 }
