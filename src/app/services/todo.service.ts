@@ -61,6 +61,18 @@ export class TodoService {
       );
   }
 
+  createNewTodo (todo: Todo): Observable<Todo > {
+    return this.http.post<Todo>(`${this.todosBaseUrl}`, todo, this.httpOptions)
+      .pipe(
+        tap(
+          todo => {
+            this.todosStore.add(todo, { prepend: true });
+          }
+        ),
+        catchError(this.handleError<Todo>('Unable to save new todo'))
+    )
+  }
+
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

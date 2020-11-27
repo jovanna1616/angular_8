@@ -13,13 +13,17 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { environment } from '../environments/environment';
 import { TodosStore } from './shared/store/todos.store';
 import { TodosQuery } from './shared/store/todos.query';
+import { TodoFormComponent } from './todo-form/todo-form.component';
+import { CreateTodoComponent } from './create-todo/create-todo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodosComponent,
     TodoDetailComponent,
-    EditTodoComponent
+    EditTodoComponent,
+    TodoFormComponent,
+    CreateTodoComponent
   ],
   imports: [
     BrowserModule,

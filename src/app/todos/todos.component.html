@@ -1,4 +1,5 @@
 <div class="content">
+  <a routerLink="/create">Add new Todo</a>
   <ul *ngIf="!isLoading$ && todos.length">
     <li *ngFor="let todo of todos">
       <a routerLink="/detail/{{todo.id}}">
