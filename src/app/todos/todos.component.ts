@@ -11,10 +11,14 @@ import { TodosQuery } from '../shared/store/todos.query';
 })
 export class TodosComponent implements OnInit {
   todos: Todo[];
+  limitTo = 10;
   isLoading$ = this.todosQuery.selectLoading();
   name$ = this.todosQuery.name;
+  loadButtonText = 'Load todos'
   @Output()
   todos$: Observable<Todo[]>;
+  todosCount = 0;
+  shouldDecrease = false
   
 
   constructor(
@@ -22,10 +26,28 @@ export class TodosComponent implements OnInit {
     private todosQuery: TodosQuery
   ) { }
 
-  ngOnInit () {
-    this.todoService.getTodos();
-    this.todosQuery.selectAll({limitTo: 10}).subscribe(todos => {
+  loadTodos () {
+    if ((this.todos.length) == this.todosCount) {
+      this.shouldDecrease = true
+    }
+    if (this.todos.length === 10 && this.shouldDecrease === true) {
+      this.shouldDecrease = false
+    }
+    this.limitTo = this.shouldDecrease ? this.limitTo - 10 : this.limitTo + 10;
+    this.todosQuery.selectAll({limitTo: this.limitTo}).subscribe(todos => {
       this.todos = todos
     })
+  }
+
+  getTodos () {
+    this.todoService.getTodos();
+    this.todosQuery.selectAll({ limitTo: this.limitTo }).subscribe(todos => {
+      this.todos = todos
+      this.todosCount = this.todosQuery.getCount()
+    })
+  }
+
+  ngOnInit () {
+    this.getTodos()
   }
 }
