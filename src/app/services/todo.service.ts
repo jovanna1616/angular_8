@@ -72,6 +72,18 @@ export class TodoService {
         catchError(this.handleError<Todo>('Unable to save new todo'))
     )
   }
+  
+  removeTodo (todoId: string): Observable<Todo> {
+    return this.http.delete<Todo>(`${this.todosBaseUrl}/${todoId}`)
+      .pipe(
+        tap(
+          response => {
+            this.todosStore.remove(todoId)
+          }
+        ),
+        catchError(this.handleError<Todo>(`Unable to remove todo by id: ${todoId}`)),
+      );
+  }
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

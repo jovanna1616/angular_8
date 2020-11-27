@@ -51,6 +51,10 @@ export class TodosComponent implements OnInit {
     })
   }
 
+  removeTodo (todo: Todo) {
+    this.todoService.removeTodo(todo.id.toString()).subscribe();
+  }
+
   ngOnInit () {
     this.getTodos()
     this.todosQuery.selectLoading().subscribe(isLoading => (this.isLoading$ = isLoading))
